@@ -1,0 +1,20 @@
+{
+  "name": "for-sockets-testing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "h3-js": "^4.1.0",
+    "leaflet": "^1.9.3",
+    "socket.io-client": "^4.6.1"
+  },
+  "devDependencies": {
+    "vite": "^4.4.2"
+  }
+}
