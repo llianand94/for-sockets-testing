@@ -31,9 +31,14 @@
     <button id="btn create-incident"> Create incident </button>
     <button id="btn create-report"> CREATE report  </button>
 
+    <form id="myForm">
+        <label for="rangeInput">Select a value:</label>
+        <input type="range" id="rangeInput" name="rangeInput" min="0" max="5">
+        <button type="submit">Submit</button>
+    </form>
 
 
-<div id="map" style="height: 600px; width: 80%"></div>
+<div id="map" style="height: 70vh; width: 100vw"></div>
     <script src="index.js"></script>
         <script type="module" src="mapRender.js"></script>
 </body>

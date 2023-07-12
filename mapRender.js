@@ -1,45 +1,61 @@
 // Define the GeoJSON data as a JavaScript object
-
+let map;
 // const url = "http://localhost:3000/api/incident/get-H3?layout=1&limit=300"
-const url = "http://localhost:3001/api/feature/list"
-const data = await fetch(url)
-  .then(value => value.json())
-  .then(data => data);
+const rangeInput = document.getElementById("rangeInput");
+
+rangeInput.addEventListener("input",
+  function (event) {
+    // event.preventDefault();
+    const value = rangeInput.value;
+    const baseUrl = `http://localhost:3001/api/feature/list?res=`;
+
+    console.log("==>>", value)
+
+    const data = fetch(baseUrl+value)
+      .then(value => value.json())
+      .then(data => {
+          if(map) {
+            map.off();
+            map.remove();
+          }
+          // Initialize the Leaflet map
+          map = L.map('map')
+            .setView(
+              [40.19753392914425, -96.99028861492357],
+              3);
+          console.log("==> data", data);
+
+          // Add a tile layer to the map
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            minZoom: 2,
+            maxZoom: 11,
+            name: 'Carto Light',
+            // attribution: 'Map data &copy; OpenStreetMap contributors'
+          }).addTo(map);
+
+          var myStyle = {
+            "color": "rgba(53,136,226,0.87)",
+            "weight": 1,
+            "opacity": 0.65
+          };
+
+          // Add the GeoJSON data to the map
+          L.geoJSON(data, {
+            style: myStyle,
+            onEachFeature: onHexagonClick
+
+          } ).addTo(map);
+
+          function onHexagonClick(feature, layer) {
+            if (feature.properties && feature.properties.hexCount) {
+              layer.bindPopup("Count Of Incidents: " + feature.properties.hexCount);
+            }
+          }
+        }
+      );
+  });
 
 
-console.log("==> data", data);
-// Initialize the Leaflet map
-const map = L.map('map')
-  .setView(
-    [47.954586856562486, 34.91509533137332],
-    15);
-
-// Add a tile layer to the map
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  minZoom: 4,
-  maxZoom: 11,
-  name: 'Carto Light',
-  // attribution: 'Map data &copy; OpenStreetMap contributors'
-}).addTo(map);
-
-var myStyle = {
-  "color": "rgba(53,136,226,0.87)",
-  "weight": 1,
-  "opacity": 0.65
-};
-
-// Add the GeoJSON data to the map
-L.geoJSON(data, {
-  style: myStyle,
-  onEachFeature: onHexagonClick
-
-} ).addTo(map);
-
-function onHexagonClick(feature, layer) {
-  if (feature.properties && feature.properties.hexCount) {
-    layer.bindPopup("Count Of Incidents: " + feature.properties.hexCount);
-  }
-}
 
 // ***********************************************************************
 
